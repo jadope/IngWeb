@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Javascript OO</title>
+
+		<meta name="description" content="Introducción a la programación Orientada a Objetos usando Javascript">
+		<meta name="author" content="Pam Rucinque">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h2>Javascript OO</h2>
+					<p>
+					</p>
+				</section>
+				<section>
+					<h2>Objetos</h2>
+				</section>
+				<section>
+					<section>
+						<h3>Generalidades</h3>
+						<p>
+							<ul>
+								<li>Los objetos son contenedores de propiedades separadas por comas</li>
+								<li>Las propiedades consisten de un nombre y un valor</li>
+								<li>Los valores pueden ser de cualquier tipo: String, objetos, arrays, funciones, etc.</li>
+							</ul>
+						</p>
+							<pre>
+								<code contenteditable data-trim class="javascript">
+var miObjeto = { 
+ nombre : 'valor',
+ numero : 0.1,
+ myArray: [],
+ myMethod : function () {
+	console.log('Cualquier método');
+ }
+}
+								</code>
+							</pre>
+						<p>
+							<small>A diferencia de .Net o Java, los objetos JavaScript no necesitan una clase</small>
+						</p>
+					</section>
+					<section>
+						<h3>Propiedades</h3>
+						<p style="text-align:left;">
+							Un nombre válido
+							<ul>
+								<li>Comienza por <code style="color:orange;">$</code>, <code style="color:orange;">_</code> o una letra</li>
+								<li>Puede contener letras, números y los caracteres <code style="color:orange;">$</code> y <code style="color:orange;">_</code></li>
+								<li>No puede ser una palabra reservada de JavaScript</li>
+							</ul>
+						</p>
+						<p style="text-align:left;">
+							Las variables pueden tener nombres inválidos, pero deben estar entre comillas:
+							<pre>
+								<code contenteditable data-trim class="javascript">
+var miObjeto = { 
+ $nombre : 'válido',
+ _apellido : 'válido',
+ direccion : 'válido',
+ direccion2 : 'válido',
+ '01800-telefono' : 'inválido',
+ 'dir-trabajo': 'inválido',
+ 'número-celular' : 'inválido', 
+ 'function' : 'inválido'
+}
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Acceso</h3><br>
+						<p style="text-align:left;">
+							Si el nombre de la propiedad es válido: 
+							<pre>
+								<code class="javascript" contenteditable data-trim>
+miObjeto.$nombre; 		
+miObjeto.['$nombre'];
+								</code>
+							</pre>
+						</p>
+						<p style="text-align:left;">
+							Si el nombre de la propiedad es inválido
+							<pre>
+								<code class="javascript" contenteditable data-trim>
+miObjeto.['function'];
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Acceso</h3><br>
+						<p style="text-align:left;">
+							Tratar de acceder a valores de <code style="color:#994C00">undefined </code> lanza una excepción <code style="color:#994C00">TypeError</code>
+							<pre>
+								<code class="javascript" contenteditable data-trim>
+miObjeto.noExiste; //undefined 		
+miObjeto.noExiste.valor; // TypeError
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Actualización</h3><br>
+						<p style="text-align:left;">
+							Se actualiza asignándole un valor a una propiedad.<br>
+							Si la propiedad ya existía, el valor se reemplaza; sino se crea una nueva propiedad
+							<pre>
+								<code class="javascript" contenteditable data-trim>
+miObjeto.$nombre = 'Pam Rucinque';
+miObjeto.edad = 29;
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Actualización</h3>
+						<p style="text-align:left;">
+							El paso de los objetos es siempre por referencia. <br>
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+var student = {
+ name:'Andrés';
+}
+
+var teacher = student; 
+teacher.name = 'Felipe';
+
+student.name;
+								</code>
+							</pre>
+						</p>
+						<p style="text-align:left;">
+							El paso de los primitivos es por valor.
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+var studentName = student.name;
+studentName = 'Pam';
+
+student.name; 
+								</code>
+							</pre>
+						</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Prototype</h3><br>
+						<p style="text-align:left;">
+							<ul>
+								<li>Todo objeto tiene un "prototipo" del cual heredan propiedades</li>
+								<li>Todos los objetos, por ejemplo, heredan de <code style="font-weight:bold;">Object.prototype</code></li>
+							</ul>
+							<br><br>
+							<figure style="border: solid grey 1px;">
+								<img style="border: solid grey 1px;" src="images/prototype.png">
+							</figure>
+						</p>
+					</section>
+					<section>
+						<h3>Prototype</h3><br>
+						<p style="text-align:left;">
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+var persona = {
+ nombre : 'Pepe Perez', 
+ edad : 25,
+};
+
+var empleado = Object.create(persona);
+empleado.contrato = 'Indefinido';
+								</code>
+							</pre>
+						</p>
+						<figure style="border: solid grey 1px;">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/personaPrototype.png">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/empleadoPrototype.png">
+						</figure>
+					</section>
+					<section>
+						<h3>Prototype</h3><br>
+						<p style="text-align:left;">
+							<ul>
+								<li>Cuando se trata de acceder a una variable que no existe en el objeto, se busca en su prototipo.</li>
+								<li>Las propiedades se pueden sobreescribir</li>
+							</ul>
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+empleado.nombre; //Pepe Perez
+empleado.nombre = 'Mickey Mouse';
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Prototype</h3><br>
+						<p style="text-align:left;">
+							<ul>
+								<li>Las propiedades que se agreguen al prototipo, se verán reflejadas en todos los objetos que se basan en él.</li>
+							</ul>
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+empleado.genero;
+
+//Se le adiciona una propiedad al prototipo
+persona.genero = 'masculino';
+
+empleado.genero;
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Prototype</h3>
+						<p style="text-align:left;">
+							<ul>
+								<li>Para iterar sobre las propiedades que tiene el objeto se usa <code style="font-weight:bold;">for in</code></li>
+								<li><code style="font-weight:bold;">for in</code> retorna todas las propiedades en la cadena de prototipos</li>
+								<li>Para acceder unicamente a las propiedades del objeto se debe usar la función <code style="font-weight:bold;">hasOwnProperty()</code></li>
+							</ul>
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+//Listar todas las propiedades, incluyendo las heredadas
+for (var name in empleado) {
+ console.log(name);
+}
+
+//Lista, unicamente, los atributos del objeto
+for (var name in empleado) {
+ if (empleado.hasOwnProperty(name) 
+   && typeof(empleado[name]) !== 'function') {
+  console.log(name);
+ }
+}
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Prototype</h3>
+						<p style="text-align:left;">
+							<ul>
+								<li>Las propiedades también se puede eliminar con el comando: <code style="font-weight:bold;">delete</code></li>
+								<li>Si una propiedad que sobreescribía una del prototipo es eliminada, la del prototipo reaparece</li>
+							</ul>
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+delete empleado.pedirAumento;
+empleado.pedirAumento; //undefined
+
+empleado.nombre; // 'Mickey Mouse'
+delete empleado.nombre;
+
+empleado.nombre; // 'Pepe Perez'
+								</code>
+							</pre>
+						</p>
+					</section>
+					<section>
+						<h3>Prototype</h3>
+						<p style="text-align:left;">
+							Usando prototype se puede adicionar funcionalidad nueva a los tipos (Function, Object, Boolean, etc.) de Javascript. Todos los valores de dicho tipo tienen acceso a la funcionalidad.
+							<pre>
+								<code class="javascript" data-trim contenteditable>
+Function.prototype.method = function (name, func) {
+ this.prototype[name] = func;
+ return this;
+};
+
+Number.method('integer', function () {
+ return Math[this < 0 ? 'ceil' : 'floor'](this);
+});
+
+(4.5).integer(); //4
+(-2.3).integer(); // -2 
+								</code>
+							</pre>
+						</p>
+					</section>
+				</section>
+				<section>
+					<h2>Funciones</h2>
+				</section>
+				<section>
+					<section>
+						<h3>Funciones</h3>
+						<small>Generalidades</small><br>
+						<ul>
+							<li>Son la piedra angular de Javascript</li>
+							<li>Facilitan la encapsulación (scope propio) y la reutlización de código</li>
+							<li>Son objetos</li>
+							<li>Su prototipo es <code style="font-weight:bold;">Function.prototype</code> que a su vez tiene como prototipo <code style="font-weight:bold;">Object.prototype</code></li>
+						</ul>
+					</section>
+					<section>
+						<h3>Funciones</h3>
+						<small>Function literal</small>
+						<p style="text-align:left;">
+							Una función está compuesta así:
+							<ul>
+								<li>La palabra reservada <code style="color:orange;">function</code></li>
+								<li>El nombre de la función es opcional</li>
+								<li>Parametros (opcionales) entre paréntesis</li>
+								<li>El cuerpo de la función entre llaves</li>
+							</ul>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+function myFunction(args) {
+	//instrucciones
+};
+
+var myFunction2 = function() {
+	
+};
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Funciones</h3>
+						<small>Anónimas</small><br>
+						<p style="text-align:left;">
+							<ul>
+								<li>Las funciones que no tienen nombre se les conoce como funciones anónimas</li>
+							</ul>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+window.onload(function() {
+	
+});
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Funciones</h3>
+						<small>Argumentos</small>
+						<p style="text-align:left;">
+							<ul>
+								<li>No se valida que el tipo del valor que se envíe sea el esperado</li>
+								<li>No se valida que el número de parametros enviados y esperados coincidan</li><br>
+								<li>Si se envían menos parámetros que los definidos, los que faltan quedan <code style="font-weight:bold;">undefined</code></li>
+							</ul>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+function menosParametros(arg0, arg1, arg2) {
+	console.log('arg0: ' + arg0);
+	console.log('arg1: ' + arg1);
+	console.log('arg2: ' + arg2);
+}
+
+menosParametros('Blah Blah', 'Waka Waka');
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Funciones</h3>
+						<small>Argumentos</small>
+						<p style="text-align:left;">
+							<ul>
+								<li>Si se envían más parámetros que los definidos, los que sobran son ignorados</li>
+							</ul>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+function masParametros(arg0, arg1, arg2) {
+	console.log('arg0: ' + arg0);
+	console.log('arg1: ' + arg1);
+	console.log('arg2: ' + arg2);
+}
+
+masParametros('Blah Blah', 'Waka Waka', 'Último', 'Sobra', 'Sobra2');
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Funciones</h3>
+						<small>Argumentos</small>
+						<p style="text-align:left;">
+							Además de los parámetros declarados, las funciones tienen acceso a dos parámetros adicionales
+							<ul>
+								<li><code style="font-weight:bold;">this</code><small>**Más detalles después</small></li>
+								<li><code style="font-weight:bold;">arguments</code></li>
+							</ul>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+function noParameters () {
+ for (var i=0; i < arguments.length; i++) {
+   console.log(arguments[i]);
+ }
+}
+
+noParameters('arg0', 'arg1', 'arg2', 'arg3');
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Funciones</h3>
+						<small>Return</small>
+						<p style="text-align:left;">
+							<ul>
+								<li>Las funciones retornan sus respuesta con la palabra reservada <code style="font-weight:bold;">return</code></li>
+								<li>Si la función no tiene <code style="font-weight:bold;">return</code>, entonces el retorno es <code style="font-weight:bold;">undefined</code></li>
+							</ul>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+function sinReturn () {
+	
+}
+
+sinReturn();
+							</code>
+						</pre>
+					</section>
+				</section>
+				<section>
+					<h2><code style="font-weight:bold">this</code></h2>
+				</section>
+				<section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3><br>
+						<p style="text-align:left;">
+							<ul>
+								<li><code style="font-weight:bold">this</code> es, probablemente, el concepto que más genera confusión en los desarrolladores nuevos a JavaScript</li><br>	
+								<li>Se refiere al contexto sobre el que se está ejecutando el código</li><br>
+								<li>Funciona diferente a como lo hace en Java o .Net</li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3><br>
+						<p style="text-align:left;">
+							El valor de <code style="font-weight:bold">this</code> cambiará de acuerdo al contexto donde se ejecute el código, hay 3 contextos: <br><br>
+							<ul>
+								<li>Global</li>
+								<li>Función</li>
+								<li>Eval <small>** Este último no será parte del curso</small></li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>Contexto Global</small><br><br>
+						<p style="text-align:left;">
+							Siempre que se esté ejecutando código en el contexto global, <code style="font-weight:bold">this</code> hará referencia a este: 
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+$VARIABLE = 'Prueba de this';
+							</code>
+						</pre>
+						<figure style="border: solid grey 1px;">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/this.png">
+						</figure>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>Contexto de Función</small><br><br>
+						<p style="text-align:left;">
+							El comportamiento de <code style="font-weight:bold">this</code> en una función depende de como se invoque la función.
+							Hay 4 formas de invocación: <br><br>
+							<ul>
+								<li>Como un método</li>
+								<li>Como una función</li>
+								<li>Como un constructor</li>
+								<li>Usando <code style="font-weight:bold">apply</code></li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>En Función Invocada como Método</small>
+						<p style="text-align:left;">
+							Si una función es una propiedad de un objeto, se conoce como método. En este caso, <code style="font-weight:bold">this</code> apunta al objeto.<br>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+var perro = {
+ $color : 'Gris',
+ $nombre: 'Baco',
+ $raza : 'Weimaraner', 
+
+ ladrar : function() {
+  console.log('rof!')
+ }
+}
+							</code>
+						</pre>
+						<figure style="border: solid grey 1px;">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/method.png">
+						</figure>
+						<small>**La captura de pantalla se hizo mientras la ejecución estaba detenida en el método ladrar</small>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>En Función Invocada como ... función</small>
+						<p style="text-align:left;">
+							Si una función es invocada así : 
+							<code style="font-weight:bold;">funcionBasica()</code>, <code style="font-weight:bold;">this</code> apunta al objeto global.<br>
+								
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+function funcionBasica() {
+	console.log('Función ejecutada como función');
+}
+							</code>
+						</pre>
+						<figure style="border: solid grey 1px;">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/funcion.png">
+						</figure>
+						<small>**La captura de pantalla se hizo mientras la ejecución estaba detenida en la función <code>funcionBasica()</code></small>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>En Función Invocada como ... función</small>
+						<p style="text-align:left;">
+							Si una función es invocada como una función dentro de un objeto
+							<code style="font-weight:bold;">this</code> sigue apuntando al objeto global.
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+var gato = {
+ $nombre: 'Orión',
+ $raza: 'Chandoso',
+
+ maullar : function() {
+
+  function sinAcceso() {
+   console.log('Al leer $raza :' + $raza);
+  }
+  sinAcceso();
+ }
+}
+							</code>
+						</pre>
+						<figure style="border: solid grey 1px;">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/funcionObjeto.png">
+						</figure>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>En Función Invocada como Constructor</small>
+						<p style="text-align:left;">
+							Los constructores son funciones que se invocan con la palabra    <code style="font-weight:bold;">new</code> antes. <br>
+							<ul>
+								<li>Tienen como propósito crear objetos</li>
+								<li>Por convención su primera letra es mayúscula</li>
+								<li>Si no definen un return, automáticamente retorna <code style="font-weight:bold">this</code></li>
+								<li><code style="font-weight:bold">this</code> apunta al nuevo objeto creado</li>
+							</ul>
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+var Avion = function() {
+	this.marca = 'Airbus';
+	this.modelo = 'A380';
+	this.pasajeros = '300';
+
+	//Esta loc es opcional
+	return this; 
+}
+
+var avion = new Avion();
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>En Función Invocada como Constructor</small>
+						<p style="text-align:left;">
+							Si la función no construye nada, <code style="font-weight:bold">this</code> apuntará a un objeto vacío.
+						</p>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+var MiObjeto = function() {
+	console.log('Retorna un Objeto vacío.');
+}
+
+var objeto = new MiObjeto();
+							</code>
+						</pre>
+						<figure style="border: solid grey 1px;">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/constructor.png">
+						</figure>
+						<small>**La captura de pantalla se hizo mientras la ejecución estaba detenida en el constructor <code>MiObjeto()</code></small>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>En Función Invocada usando <code>apply</code></small>
+						<p style="text-align:left;">
+							<code style="font-weight:bold">apply</code> es un método que permite ejecutar funciones. Recibe dos parámetros
+							<ul>
+								<li><code style="font-weight:bold">this</code></li>
+								<li>Un arreglo de argumentos</li>
+							</ul>
+						</p> <br>
+						<p style="text-align:left;">
+							Cuando una función se invoca usando el comando apply, <code style="font-weight:bold">this</code> toma el valor que se pase por parámetros.
+						</p>
+					</section>
+					<section>
+						<h3><code style="font-weight:bold">this</code></h3>
+						<small>En Función Invocada usando <code>apply</code></small>
+						<pre>
+							<code data-trim contenteditable class="javascript">
+
+nombre = 'Mafalda I';
+autor = 'Quino';
+
+function imprimirLibro() {
+ console.log(this.nombre + ' fue escrito por ' + this.autor);
+}
+
+imprimirLibro(); //Mafalda fue escrito por Quino
+
+imprimirLibro.apply({nombre: 'Condorito', autor : 'alguien'}, null);
+							</code>
+						</pre>
+						<figure style="border: solid grey 1px;">
+							<img style="border: solid grey 1px; vertical-align: top;" src="images/apply.png">
+						</figure>
+					</section>
+				</section>
+				<section>
+					<h2>Closures</h2>
+				</section>
+				<section>
+					<section>
+						<h3>Closures</h3>
+						<p style="text-align:left">
+							Closures es un concepto fundamental en JavaScript. <br>
+							Con esto se permite: 
+							<ul>
+								<li>Tener propiedades privadas (Encapsulamiento)</li>
+								<li>Crear módulos y extenderlos (Cohesión)</li>
+								<li>Crear objetos</li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h3>Closures</h3> <br>
+						<p style="text-align:left;">
+							Crear función que calcule probabilidad de Llover. <br>
+							Asumamos que para "calcular" esto se necesita: <br>
+						</p>
+						<ol>
+							<li>Calcular la presión atmosférica</li>
+							<li>Multiplicar por la Constante de Fulano</li>
+						</ol>
+						<br><br>
+						<p style="text-align:left">
+							Se debe tener en cuenta que: <br>
+						</p>
+						<ul>
+							<li>El contexto global solo debe tener la función
+								<code style="font-weight:bold;">calcularProbabilidadLluvia</code></li>
+							<li>La Constante de Fulano no puede ser modificada</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Closures</h3>
+						<pre>
+							<code contentenabled data-trim class="javscript">
+var crearCalculoProbabilidadLluvia = function() {
+ //Variable Privada 
+ var _constanteDeFulano = 0.5;
+
+ //Método Privado
+ function calcularPresionAtmosferica(ciudad) {
+  return Math.random();
+ }
+
+ //'return function' hace la magia!
+ return function(ciudad, mes) {
+  var presion = calcularPresionAtmosferica(ciudad);
+  return Math.floor(presion*_constanteDeFulano*100);
+ }
+}
+
+var calcularProbabilidadLluvia = crearCalculoProbabilidadLluvia();
+							</code>
+						</pre>
+						<small>Pero hay un problema: Quedaron dos funciones en el contexto global.</small>
+					</section>
+					<section>
+						<h3>Closures</h3><br>
+						<p style="text-align: left">
+							Para evitar esto existen los closures automáticos, donde la función se define y se ejecuta en la misma sentencia.
+						</p>
+							<pre>
+								<code contentenabled data-trim class="javascript">
+var calcularProbabilidadLluvia = function() {
+ //Variable Privada 
+ var _constanteDeFulano = 0.5;
+
+ //Método Privado
+ function calcularPresionAtmosferica(ciudad) {
+  return Math.random();
+ }
+
+ //'return function' hace la magia!
+ return function(ciudad, mes) {
+  var presion = calcularPresionAtmosferica(ciudad);
+  return Math.floor(presion*_constanteDeFulano*100);
+ }
+}();
+								</code>
+							</pre>
+					</section>
+					<section>
+						<h3>Closures</h3><br><br>
+						<p>
+							Los Closures también funcionan con Constructores. <br>
+						</p>
+						<pre>
+							<code contentenabled data-trim class="javascript">
+var Persona = function() {
+ var _edad; 
+
+ this.getEdad = function() {
+   return _edad;
+ }
+}
+
+var fulano = new Persona();
+							</code>
+						</pre>
+						<p>
+							Analicemos <a href="../examples/closureConstructor.js">este Ejemplo!</a>
+						</p>
+					</section>
+					<section>
+						<h3>Closures</h3><br>
+						<p style="text-align:left">
+							Usando closures también se pueden crear objetos sin usar constructores. Este concepto se conoce como <span style="font-weight:bold">Factory Method</span>. El siguiente código genera el mismo objeto que el del anterior slide: 
+						</p>
+						<pre>
+							<code contentenabled data-trim class="javascript">
+var persona = function() {
+ var _edad; 
+
+  return {
+   getEdad = function() {
+    return _edad;
+   }
+}
+
+var fulano = persona();
+							</code>
+						</pre>
+						<p>
+							Analicemos <a href="../examples/closureFactoryMethod.js">este Ejemplo!</a>
+						</p>
+					</section>
+				</section>
+				<section>
+					<h3>Herencia y Polimorfismo</h3>
+				</section>
+				<section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<p style="text-align:left;">
+							El polimorfismo es la capacidad de un objeto de tener más de una forma. <br>
+							En Java por ejemplo, se implenetaría algo así: <br><br>
+
+							<code style="font-weight:bold;">
+								Animal perro = new Perro();
+							</code> <br>
+							<small>Donde perro hereda de animal</small><br>
+
+							En Javascript las variables no tiene tipo, por lo tanto el casting de objetos no es necesario. <br><br>
+							El polimorfismo en Javascript es gratis!
+						</p>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<p style="text-align:left;">
+							La herencia tiene dos objetivos: 
+						</p>
+							<ul>
+								<li>Polimorfismo: Gratis en JavaScript</li>
+								<li>Reusar código: Heredar propiedades y métodos</li>
+							</ul><br><br>
+						<p style="text-align:left;">
+							Revisemos, nuevamente, prototype
+							<figure style="border: solid grey 1px;">
+								<img style="border: solid grey 1px; vertical-align: top;" src="images/herenciaPrototype.png">
+							</figure>
+						</p>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<code style="font-weight:bold">prototype</code> vs. 
+							<code style="font-weight:bold">__proto__</code><br><br>
+						<p style="text-align:left;">
+							Ya habíamos revisado prototype como concepto: <br><br>	
+						</p>
+						<ul>
+							<li>Los objetos tienen un prototipo del cual heredan</li>
+							<li>Si se adiciona una propiedad al prototipo, todos los hijos la tendrán</li>
+						</ul><br><br>
+						<p style="text-align:left;">
+							Pero hay una propiedad <code style="font-weight:bold">prototype</code> que puede ser confusa y cuando se usan constructores para crear objetos es importante entender la diferencia.
+						</p>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<code style="font-weight:bold">prototype</code> vs. 
+							<code style="font-weight:bold">__proto__</code><br><br>
+						<p style="text-align:left;">
+							<code style="font-weight:bold">prototype</code> es una propiedad de las funciones. <br>
+							Es particularmente importante con constructores
+						</p>
+						<pre>
+							<code contentenabled data-trim class="javascript">
+var imprimir = function() {}
+imprimir.prototype;
+
+var Carro = function() {}
+var myCar = new Carro();
+Carro.prototype;
+							</code>
+						</pre>
+						<p style="text-align:left;">
+							Object, Function, Array, Number, etc son ejemplos de constructores.
+						</p>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<code style="font-weight:bold">prototype</code> vs. 
+							<code style="font-weight:bold">__proto__</code><br><br>
+						<p style="text-align:left;">
+							<code style="font-weight:bold">constructor</code> es una propiedad de <code style="font-weight:bold">prototype</code>. Es el método que se invoca cuando se usa 'new'.
+						</p>
+						<pre>
+							<code contentenabled data-trim class="javascript">
+Object.prototype.constructor;
+Number.prototype.constructor;
+
+var Person = function () {
+	this.name = '';
+}
+
+Person.prototype.constructor;
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<code style="font-weight:bold">prototype</code> vs. 
+							<code style="font-weight:bold">__proto__</code><br><br>
+						<p style="text-align:left;">
+							<code style="font-weight:bold">__proto__</code> es un link "escondido" que tienen todos los objetos en JavaScript al prototipo del cual fueron creados. <br>
+							<pre>
+							<code contentenabled data-trim class="javascript">
+//Un objeto literal tiene __proto__
+var o = {};
+o.__proto__;
+
+//Una función literal tiene __proto__
+var hagoAlgo = function () {};
+hagoAlgo.__proto__;
+
+//Los tipos tienen __proto__
+Function.__proto__;	
+							</code>
+						</pre>
+						</p>
+						<p style="text-align:left;">
+							Cuando se accede a una propiedad y el objeto no la tiene, JS la busca en <code style="font-weight:bold">__proto__</code>.
+						</p>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<code style="font-weight:bold">prototype</code> vs. 
+							<code style="font-weight:bold">__proto__</code><br>
+							<pre>
+							<code contenteditable data-trim class="javascript">
+var Person = function(name) {
+ this.name = name || '';
+}
+
+Person.saludar = function() {
+ console.log('Hola!');
+}
+
+Person.prototype.presentarse = function() {
+ console.log('Soy ' + this.name);
+}
+
+var confusio = new Person('Confusio');
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3>
+						<code style="font-weight:bold">prototype</code> vs. 
+							<code style="font-weight:bold">__proto__</code><br><br>
+							<figure style="border: solid grey 1px;">
+								<img style="border: solid grey 1px; vertical-align: top;" src="images/protoConstructor.png">
+						</figure><br>
+						<figure style="border: solid grey 1px;">
+								<img style="border: solid grey 1px; vertical-align: top;" src="images/protoGrafico.png">
+						</figure>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3><br>
+						<figure style="border: solid grey 1px;">
+								<img style="border: solid grey 1px; vertical-align: top;" src="images/herenciaEnunciado.png">
+						</figure>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3><br>
+						<pre>
+							<code contenteditable data-trim class="javascript">
+var Animal = function () {
+//... código definición animal
+}
+
+var Perro = function() {
+ //... código definición perro
+}
+
+//La magia!
+Perro.prototype = new Animal();
+Perro.prototype.constructor = Perro;
+							</code>
+						</pre>
+						Revisemos con más detalle el <a href="../examples/inheritanceExample.js">ejemplo</a>
+					</section>
+					<section>
+						<h3>Herencia y Polimorfismo</h3><br>
+						<figure style="border: solid grey 1px;">
+								<img style="border: solid grey 1px; vertical-align: top;" src="images/herenciaGrafico.png">
+						</figure>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Buenas Prácticas</h2>
+					</section>
+					<section>
+						<h3>Ordenar los atributos Alfabeticamente</h3>
+						<pre>
+							<code contenteditable data-trim class="javascript">
+var vehiculo = {
+ chasis : 'YYyy',
+ color : 'azul',
+ motor : 'xx',
+ tipo : 'carro'
+}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Evitar las funciones anónimas</h3>
+						<p style="text-align:left;">
+							<ul>
+								<li>Las herramientas de desarrollo no las pueden referenciar si son anónimas</li>
+								<li>Si la función es recursiva, no podrá llamarse a sí misma ya que no tiene nombre</li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h3>Global Abatement</h3>
+						<small>Manejo de Objetos en una Aplicación</small><br><br>
+						<ul>
+							<li>En JS hay dos scopes: global y por función</li><br>
+							<li>Todas las librerías incluídas comparten el mismo scope de la aplicación</li><br>
+							<li>Definir los objetos de la aplicación en el contexto global puede producir conflictos con otras liberías</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Global Abatement</h3>
+						<small>Manejo de Objetos en una Aplicación</small><br><br>
+						<ul>
+							<li>Una forma de minimizar el riesto del uso de variables globales es crear una única variable global que se comporte como contenedor de todos los objetos y funciones de la aplicación </li>
+						</ul>
+						<pre>
+							<code contentenabled data-trim>
+var MYAPP = {};
+
+var MYAPP.persona = {
+ nombre : 'Fulano de Tal',
+ edad : 45
+}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Ubicación de Scripts</h3>
+						<p style="text-align:left;">
+							Cuando se cargan un script, el browser no puede continuar hasta que todo el archivo ha sido cargado. <br><br>
+							Si los scripts están en la parte de arriba, la página se demorará en ser presentada al usuario. <br><br>
+							Es por esto que se recomienda importar los scripts en la última parte de la página.
+						</p>
+						<pre>
+							<code contentenabled data-trim>
+&lt;html&gt;
+ &lt;body&gt;
+......
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.min.js"></script>
+ &lt;/body&gt;
+&lt;/html&gt;
+							</code>
+						</pre>
+					</section>
+				</section>
+					
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
